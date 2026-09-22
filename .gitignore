@@ -1,0 +1,7 @@
+node_modules/
+*-preview.png
+portfolio-preview.png
+capture.cjs
+verify.cjs
+.DS_Store
+Thumbs.db
