@@ -1,6 +1,46 @@
-const projects={cafe:{name:'CafeOn',category:'카페 탐색 · 웹 서비스',image:'assets/cafe-phone.jpg',description:'가까운 카페의 위치와 혼잡도를 지도에서 확인할 수 있는 서비스입니다. 카페를 찾는 순간부터 빈자리를 확인하는 과정까지 하나의 화면에서 이어집니다.',url:'https://team-project-five-pink.vercel.app/map'},outing:{name:'오늘의 나들이',category:'나들이 추천 · 웹 서비스',image:'assets/outing.jpg',description:'지역을 선택하고 하고 싶은 활동을 입력하면 날씨와 대기질을 고려한 코스를 추천하는 서비스입니다. 장소와 문화행사도 함께 찾아볼 수 있습니다.',url:'https://wa26bteam02.yjjob.kr/'},movie:{name:'Movie Pick',category:'영화 탐색 · JavaScript 프로젝트',image:'assets/movie.jpg',description:'현재 상영작, 인기 순위, 개봉 예정 영화를 둘러보는 영화 정보 사이트입니다. 포스터와 줄거리를 살펴보고 관심 있는 영화의 상세 정보를 확인할 수 있습니다.',url:'https://for-js-practice-ad3d.vercel.app/'},blog:{name:'아방로그',category:'기록과 공유 · 블로그',image:'assets/blog.jpg',description:'일상과 여행, 카페 이야기를 기록하는 블로그입니다. 카테고리별로 글을 둘러보고 이웃의 새로운 이야기를 만날 수 있습니다.',url:'https://cafeon.dothome.co.kr/'},app1:{name:'웹 앱 프로젝트 A',category:'Google Apps Script',description:'Google Apps Script로 만든 웹 앱입니다. 실제 앱의 기능과 프로젝트 소개는 확인 후 추가할 예정입니다.',url:'https://script.google.com/macros/s/AKfycbxrz-rRzPd-5cFc3a7gfkTUVCdCIAL2z_5E77d4Kd5-_-ZwV8wkwN057GAGiKMt5vWt/exec'},app2:{name:'웹 앱 프로젝트 B',category:'Google Apps Script · 테스트 앱',description:'Google Apps Script 기반의 테스트 웹 앱입니다. 현재 개발용 링크로 연결되어 있어 편집 권한이 있는 계정에서만 열릴 수 있습니다.',url:'https://script.google.com/macros/s/AKfycbxqy34KSV9NANe2b9LFfYUOrryuXoT44LO1YNdGf3A/dev'}};
-const dialog=document.querySelector('dialog');const content=document.querySelector('#dialog-content');let lastTrigger;
-function openProject(id){const p=projects[id];const keys=Object.keys(projects);const next=keys[(keys.indexOf(id)+1)%keys.length];content.innerHTML=`<span class="modal-category">${p.category}</span><h2 class="modal-title">${p.name}</h2><p class="modal-description">${p.description}</p>${p.image?`<div class="modal-preview"><img src="${p.image}" alt="${p.name} 실제 사이트 화면"></div>`:''}<div class="modal-actions"><a class="visit" href="${p.url}" target="_blank" rel="noopener noreferrer">실제 사이트 방문 ↗</a><button class="modal-next" data-project="${next}">다음 작업 →</button></div><p class="modal-note">${p.image?'실제 배포된 사이트를 캡처한 화면입니다. 사이트의 현재 내용은 미리보기와 다를 수 있습니다.':'프로젝트명은 임시 이름입니다.'}</p>`;if(!dialog.open)dialog.showModal();dialog.scrollTop=0;document.body.style.overflow='hidden';document.querySelector('.close-dialog').focus();}
-document.addEventListener('click',e=>{const trigger=e.target.closest('[data-project]');if(trigger){if(!dialog.open)lastTrigger=trigger;openProject(trigger.dataset.project);}});
-document.querySelector('.close-dialog').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});dialog.addEventListener('close',()=>{document.body.style.overflow='';lastTrigger?.focus();});
-document.querySelector('.copy-link').onclick=async()=>{const toast=document.querySelector('.toast');try{await navigator.clipboard.writeText(location.href.split('#')[0]);toast.textContent='페이지 주소를 복사했어요.';}catch{toast.textContent='브라우저 주소창에서 주소를 복사해 주세요.';}toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2500);};
+const dialog=document.querySelector('#project-dialog');
+const content=document.querySelector('#dialog-content');
+let lastTrigger, closeTimer;
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+function openProject(id){
+ const p=projects[id]; if(!p)return;
+ clearTimeout(closeTimer);dialog.classList.remove('is-closing');
+ const keys=Object.keys(projects),next=keys[(keys.indexOf(id)+1)%keys.length];
+ content.innerHTML='<span class="modal-category">'+p.category+'</span><h2 class="modal-title" id="modal-title">'+p.name+'</h2><p class="modal-description">'+p.description+'</p>'+
+ '<dl class="project-facts">'+p.facts.map(([k,v])=>'<div><dt>'+k+'</dt><dd>'+v+'</dd></div>').join('')+'</dl>'+
+ (id==='performance'?performanceFlow:'')+
+ (p.image?'<div class="modal-preview"><img src="'+p.image+'" alt="'+p.name+' 실제 서비스 화면"></div>':'')+
+ '<div class="modal-actions"><a class="visit" href="'+p.url+'" target="_blank" rel="noopener noreferrer">'+(id==='performance'?'개발용 링크 열기 (권한 필요)':'실제 사이트 방문 ↗')+'</a><button class="modal-next" data-project="'+next+'">다음 작업 →</button></div>'+
+ '<p class="modal-note">'+(p.notice||'화면은 기존 사이트의 캡처입니다. 팀 프로젝트 화면은 공동 결과물이며, 직접 맡은 역할은 위에 표시했습니다.')+'</p>';
+ if(!dialog.open)dialog.showModal();
+ dialog.scrollTop=0;document.body.style.overflow='hidden';
+ document.querySelector('.close-dialog').focus({preventScroll:true});
+}
+function closeProject(){
+ if(!dialog.open||dialog.classList.contains('is-closing'))return;
+ if(reducedMotion.matches){dialog.close();return;}
+ dialog.classList.add('is-closing');closeTimer=setTimeout(()=>dialog.close(),180);
+}
+document.addEventListener('click',e=>{
+ const trigger=e.target.closest('[data-project]');
+ if(trigger){if(!dialog.open)lastTrigger=trigger;openProject(trigger.dataset.project);}
+});
+document.querySelector('.close-dialog').addEventListener('click',closeProject);
+dialog.addEventListener('cancel',e=>{e.preventDefault();closeProject();});
+dialog.addEventListener('click',e=>{
+ if(e.target!==dialog)return;
+ const r=dialog.getBoundingClientRect();
+ if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeProject();
+});
+dialog.addEventListener('close',()=>{
+ clearTimeout(closeTimer);dialog.classList.remove('is-closing');
+ document.body.style.overflow='';lastTrigger?.focus({preventScroll:true});
+});
+let toastTimer;
+document.querySelector('.copy-link').onclick=async()=>{
+ const toast=document.querySelector('.toast');
+ try{await navigator.clipboard.writeText(location.href.split('#')[0]);toast.textContent='페이지 주소를 복사했어요.';}
+ catch{toast.textContent='브라우저 주소창에서 주소를 복사해 주세요.';}
+ toast.classList.add('show');clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>toast.classList.remove('show'),2500);
+};

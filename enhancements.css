@@ -1,0 +1,17 @@
+html{scrollbar-gutter:stable}
+.project-facts{padding:0;margin:24px 0;border-top:1px solid #dedbd3}
+.project-facts>div{display:grid;grid-template-columns:90px 1fr;gap:15px;padding:12px 0;border-bottom:1px solid #dedbd3;font-size:14px;line-height:1.7}
+.project-facts dt{color:#72766c;font-size:12px}.project-facts dd{margin:0}
+.function-flow{display:flex;align-items:center;justify-content:center;gap:18px;margin:28px 0;padding:25px 15px;background:#eff1e7;border-radius:14px;color:#475641}
+.function-flow>div{display:flex;flex-direction:column;align-items:center;gap:10px;min-width:78px}
+.function-flow svg{width:38px;height:38px}.function-flow span{font-size:12px;white-space:nowrap}.function-flow>b{font-size:16px;font-weight:400;opacity:.55}
+.small-lab .function-flow{background:transparent;padding:12px 0;margin:10px 0 20px;gap:9px}.small-lab .function-flow>div{min-width:68px}.small-lab .function-flow svg{width:30px;height:30px}.small-lab .function-flow span{font-size:11px}
+#project-dialog[open]{animation:modal-enter 320ms cubic-bezier(.22,1,.36,1) both}
+#project-dialog[open]::backdrop{animation:shade-enter 300ms ease-out both}
+#project-dialog.is-closing{animation:modal-exit 180ms ease-in both;pointer-events:none}
+#project-dialog.is-closing::backdrop{animation:shade-exit 180ms ease-in both}
+@keyframes modal-enter{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes modal-exit{from{opacity:1;transform:none}to{opacity:0;transform:translateY(8px) scale(.99)}}
+@keyframes shade-enter{from{opacity:0}to{opacity:1}}@keyframes shade-exit{from{opacity:1}to{opacity:0}}
+@media(max-width:600px){.project-facts>div{grid-template-columns:70px 1fr;gap:10px;font-size:13px}.function-flow{gap:8px;padding:20px 8px}.function-flow>div{min-width:62px}.function-flow span{font-size:11px}.function-flow svg{width:30px;height:30px}}
+@media(prefers-reduced-motion:reduce){#project-dialog[open],#project-dialog[open]::backdrop{animation:none}}
