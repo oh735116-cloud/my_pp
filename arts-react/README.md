@@ -15,16 +15,16 @@ npm run dev
 
 ## 수정할 파일
 
-| 내용 | 파일 |
-| --- | --- |
-| 프로젝트 상세 설명, 담당 역할, 링크 | src/projects.js |
-| 첫 화면 문구, 작업 카드 제목과 배치, 헤더·푸터 | src/components/PageSections.jsx |
-| 공연 체크리스트 항목 | src/operations.js |
-| 체크리스트 동작 | src/components/Operations.jsx |
-| 모달 내용·열기·닫기 | src/components/ProjectModal.jsx |
-| 색상, 글꼴, 반응형 레이아웃 | src/styles/style.css, src/styles/redesign.css |
-| 모달 애니메이션 | src/styles/modal-motion.css |
-| 이미지·아이콘 파일 | public/assets/, public/favicon.svg |
+| 내용                                           | 파일                                          |
+| ---------------------------------------------- | --------------------------------------------- |
+| 프로젝트 상세 설명, 담당 역할, 링크            | src/projects.js                               |
+| 첫 화면 문구, 작업 카드 제목과 배치, 헤더·푸터 | src/components/PageSections.jsx               |
+| 공연 체크리스트 항목                           | src/operations.js                             |
+| 체크리스트 동작                                | src/components/Operations.jsx                 |
+| 모달 내용·열기·닫기                            | src/components/ProjectModal.jsx               |
+| 색상, 글꼴, 반응형 레이아웃                    | src/styles/style.css, src/styles/redesign.css |
+| 모달 애니메이션                                | src/styles/modal-motion.css                   |
+| 이미지·아이콘 파일                             | public/assets/, public/favicon.svg            |
 
 카드의 짧은 소개는 PageSections.jsx에, 상세 설명은 projects.js에 있습니다.
 사진을 교체할 때 두 파일의 이미지 경로도 확인하세요. public/ 아래 파일은 배포 시 최상위로 복사됩니다.

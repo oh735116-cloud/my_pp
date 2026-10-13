@@ -6,8 +6,15 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 4177",
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir .ssr && node scripts/prerender.mjs",
-    "preview": "vite preview --host 127.0.0.1 --port 4178"
+    "preview": "vite preview --host 127.0.0.1 --port 4178",
+    "format": "prettier --write src index.html vite.config.js scripts README.md"
   },
-  "dependencies": { "react": "19.3.0", "react-dom": "19.3.0" },
-  "devDependencies": { "vite": "8.3.4" }
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "prettier": "3.9.10",
+    "vite": "8.3.4"
+  }
 }
