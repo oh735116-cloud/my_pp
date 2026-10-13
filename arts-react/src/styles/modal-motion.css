@@ -1,0 +1,28 @@
+/* Keep the page steady as the modal locks scrolling. */
+html { scrollbar-gutter: stable; }
+#project-dialog[open] {
+  animation: project-enter 320ms cubic-bezier(.22, 1, .36, 1) both;
+}
+#project-dialog[open]::backdrop {
+  animation: backdrop-enter 300ms ease-out both;
+}
+#project-dialog.is-closing {
+  animation: project-exit 180ms ease-in both;
+  pointer-events: none;
+}
+#project-dialog.is-closing::backdrop {
+  animation: backdrop-exit 180ms ease-in both;
+}
+@keyframes project-enter {
+  from { opacity: 0; transform: translateY(18px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes project-exit {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(8px) scale(.99); }
+}
+@keyframes backdrop-enter { from { opacity: 0; } to { opacity: 1; } }
+@keyframes backdrop-exit { from { opacity: 1; } to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  #project-dialog[open], #project-dialog[open]::backdrop { animation: none; }
+}
